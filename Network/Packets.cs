@@ -30,6 +30,16 @@ namespace KingPongServer.Network
             this.State = State;
             this.Countdown = Countdown;
         }
+        public GameStatePacket(GameState State, int Countdown)
+        {
+            this.State = (int)State;
+            this.Countdown = Countdown;
+        }
+        public GameStatePacket(GameState State)
+        {
+            this.State = (int)State;
+            this.Countdown = 0;
+        }
 
         [Key(0)]
         public int State { get; }
