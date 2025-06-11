@@ -31,22 +31,24 @@ namespace KingPongServer.Network
 
             while (true)
             {
+                Console.WriteLine($"Waiting for client connection...(playerCount: {playerCount})");
                 TcpClient client = listener.AcceptTcpClient();
 
                 try
                 {
                     client.GetStream().Read(buffer, 0, buffer.Length);
 
-                    if (buffer.SequenceEqual(keyPhraseBytes))   
+                    if (buffer.SequenceEqual(keyPhraseBytes))    // Die eingehende Verbindung stammt tatsächlich von unserer Anwendung
                     {
                         Console.WriteLine($"Client connected: {client.Client.RemoteEndPoint}");
+                        playerCount++;
 
                         PlayerThread playerThread = new PlayerThread(client);
                         playerThread.Start();
-                        playerThread.QueuePacket(new GameStatePacket(GameState.WAITING));
+                        playerThread.QueuePacket(new GameStatePacket(GameState.WAITING, playerCount));
 
-                        players[findFirstAvailablePlayerIndex()] = new Player(playerThread, gameInstance);
-                        playerCount++;
+                        players[findFirstAvailablePlayerIndex()] = new Player(playerThread, gameInstance, playerCount);
+                        
                         if(playerCount == 2) 
                         {
                             gameInstance.StartGame(players[0], players[1]);
@@ -68,6 +70,7 @@ namespace KingPongServer.Network
 
         public void handlePlayerDisconnect(PlayerThread playerThread)
         {
+            Console.WriteLine($"Player disconnected: {playerThread.getRemoteEndPoint()}");
             for(int i = 0; i < players.Length; i++)
             {
                 if(players[i].playerThread == playerThread)

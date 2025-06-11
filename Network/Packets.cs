@@ -25,26 +25,31 @@ namespace KingPongServer.Network
     [MessagePackObject]
     public class GameStatePacket : IPacket
     {
-        public GameStatePacket(int State, int Countdown)
+        public GameStatePacket(int State, int Countdown, int playerId)
         {
             this.State = State;
             this.Countdown = Countdown;
+            this.playerId = playerId;
         }
-        public GameStatePacket(GameState State, int Countdown)
+        public GameStatePacket(GameState State, int Countdown, int playerId)
         {
             this.State = (int)State;
             this.Countdown = Countdown;
+            this.playerId = playerId;
         }
-        public GameStatePacket(GameState State)
+        public GameStatePacket(GameState State, int playerId)
         {
             this.State = (int)State;
             this.Countdown = 0;
+            this.playerId = playerId;
         }
 
         [Key(0)]
         public int State { get; }
         [Key(1)]
         public int Countdown { get; }
+        [Key(2)]
+        public int playerId { get; }
     }
 
     [MessagePackObject]
@@ -102,7 +107,7 @@ namespace KingPongServer.Network
     [MessagePackObject]
     public class PaddlePositionPacket : IPacket
     {
-        public PaddlePositionPacket(double PaddleOneX, double PaddleOneY, double PaddleOneVelocityX, double PaddleOneVelocityY, double PaddleTwoX, double PaddleTwoY, double PaddleTwoVelocityX, double PaddleTwoVelocityY)
+        public PaddlePositionPacket(double PaddleOneX, double PaddleOneY, double PaddleOneVelocityX, double PaddleOneVelocityY, double PaddleTwoX, double PaddleTwoY, double PaddleTwoVelocityX, double PaddleTwoVelocityY, double BallX, double BallY, double BallVelocityX, double BallVelocityY)
         {
             this.PaddleOneX = PaddleOneX;
             this.PaddleOneY = PaddleOneY;
@@ -113,6 +118,11 @@ namespace KingPongServer.Network
             this.PaddleTwoY = PaddleTwoY;
             this.PaddleTwoVelocityX = PaddleTwoVelocityX;
             this.PaddleTwoVelocityY = PaddleTwoVelocityY;
+
+            this.BallX = BallX;
+            this.BallY = BallY;
+            this.BallVelocityX = BallVelocityX;
+            this.BallVelocityY = BallVelocityY;
         }
 
 
@@ -136,6 +146,16 @@ namespace KingPongServer.Network
         public double PaddleTwoVelocityX { get; }
         [Key(7)]
         public double PaddleTwoVelocityY { get; }
+
+        [Key(8)]
+        public double BallX { get; }
+        [Key(9)]
+        public double BallY { get; }
+
+        [Key(10)]
+        public double BallVelocityX { get; }
+        [Key(11)]
+        public double BallVelocityY { get; }
     }
 
 

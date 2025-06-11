@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -56,6 +57,7 @@ namespace KingPongServer.Network
                     // eingehende pakete empfangen
                     if (stream.DataAvailable)
                     {
+                        Console.WriteLine("Data available");
                         try
                         {
                             byte[] buffer = new byte[4096];
@@ -80,9 +82,12 @@ namespace KingPongServer.Network
                     // ausgehende pakete senden
                     while (packetQueue.TryDequeue(out IPacket packet))
                     {
+                        
                         try
                         {
                             byte[] data = MessagePackSerializer.Serialize(packet);
+                            Console.WriteLine($"Sending packet: {packet.GetType()}, len: {data.Length}");
+                            stream.Write(BitConverter.GetBytes(data.Length), 0, 2);
                             stream.Write(data, 0, data.Length);
                             stream.Flush();
                         }
@@ -91,6 +96,7 @@ namespace KingPongServer.Network
                             Console.WriteLine($"Error sending packet: {ex.Message}");
                             break;
                         }
+                        Thread.Sleep(5);
                     }
 
                     // spinning schlecht
@@ -113,6 +119,10 @@ namespace KingPongServer.Network
                 // Server informieren, dass dieser Spieler die Verbindung verloren hat
                 Application.ServerInstance.handlePlayerDisconnect(this);
             }
+        }
+        public System.Net.EndPoint getRemoteEndPoint()
+        {
+            return client.Client.RemoteEndPoint;
         }
     }
 }
