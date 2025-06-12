@@ -6,7 +6,7 @@ namespace KingPongServer
     {
         public PlayerThread playerThread;
         private Game game;
-        private int id;
+        public int id { get; }
 
         public int score { get; set; }
         

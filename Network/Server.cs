@@ -38,7 +38,7 @@ namespace KingPongServer.Network
                 {
                     client.GetStream().Read(buffer, 0, buffer.Length);
 
-                    if (buffer.SequenceEqual(keyPhraseBytes))    // Die eingehende Verbindung stammt tats‰chlich von unserer Anwendung
+                    if (buffer.SequenceEqual(keyPhraseBytes))    // Die eingehende Verbindung stammt tats√§chlich von unserer Anwendung
                     {
                         Console.WriteLine($"Client connected: {client.Client.RemoteEndPoint}");
                         playerCount++;
@@ -47,7 +47,7 @@ namespace KingPongServer.Network
                         playerThread.Start();
                         playerThread.QueuePacket(new GameStatePacket(GameState.WAITING, playerCount));
 
-                        players[findFirstAvailablePlayerIndex()] = new Player(playerThread, gameInstance, playerCount);
+                        playerThread.player = players[findFirstAvailablePlayerIndex()] = new Player(playerThread, gameInstance, playerCount);
                         
                         if(playerCount == 2) 
                         {
