@@ -148,26 +148,36 @@ namespace KingPongServer.Network
         {
             if(packet is PaddleControlPacket)
             {
-                
-                PaddleControlPacket paddleControlPacket = (PaddleControlPacket)packet;
-
-                System.Console.WriteLine("PaddleControlPacket received: " + paddleControlPacket.Direction);
-
-                if(player.id == 1)
+               
+                if(Application.ServerInstance.gameInstance.state == GameState.ACTIVE)
                 {
-                    Application.ServerInstance.gameInstance.paddle1.setMotionY((-1.0) * paddleControlPacket.Direction * 60);
-                    System.Console.WriteLine($"Paddle1 motionY: {Application.ServerInstance.gameInstance.paddle1.getMotionY()}, posY: {Application.ServerInstance.gameInstance.paddle1.getY()}");
-                }else
+
+                    PaddleControlPacket paddleControlPacket = (PaddleControlPacket)packet;
+
+                    System.Console.WriteLine("PaddleControlPacket received: " + paddleControlPacket.Direction);
+
+                    if (player.id == 1)
+                    {
+                        Application.ServerInstance.gameInstance.paddle1.setMotionY((-1.0) * paddleControlPacket.Direction * 60);
+                        System.Console.WriteLine($"Paddle1 motionY: {Application.ServerInstance.gameInstance.paddle1.getMotionY()}, posY: {Application.ServerInstance.gameInstance.paddle1.getY()}");
+                    }
+                    else
+                    {
+                        Application.ServerInstance.gameInstance.paddle2.setMotionY((-1.0) * paddleControlPacket.Direction * 60);
+                        System.Console.WriteLine($"Paddle2 motionY: {Application.ServerInstance.gameInstance.paddle2.getMotionY()}, posY: {Application.ServerInstance.gameInstance.paddle2.getY()}");
+                    }
+
+                }
+                else if (packet is PingPacket)
                 {
-                    Application.ServerInstance.gameInstance.paddle2.setMotionY((-1.0) * paddleControlPacket.Direction * 60);
-                    System.Console.WriteLine($"Paddle2 motionY: {Application.ServerInstance.gameInstance.paddle2.getMotionY()}, posY: {Application.ServerInstance.gameInstance.paddle2.getY()}");
+                    PingPacket pingPacket = (PingPacket)packet;
+                    packetQueue.Enqueue(new PingPacket(pingPacket.Id));
                 }
 
-            }else if(packet is PingPacket)
-            {
-                PingPacket pingPacket = (PingPacket)packet;
-                packetQueue.Enqueue(new PingPacket(pingPacket.Id));
+
             }
+
+              
         }
 
 

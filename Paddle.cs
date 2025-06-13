@@ -13,8 +13,8 @@ namespace KingPongServer
 
         public Paddle() 
         {
-            width = 10;
-            height = 120;
+            width = 20;
+            height = 240;
 
             motionY = 0;
         }

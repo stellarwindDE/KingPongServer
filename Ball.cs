@@ -6,7 +6,7 @@ namespace KingPongServer
 {
     public class Ball
     {
-        public const int size = 5;
+        public const int size = 20;
 
         public double posX { get; private set; }
         public double posY { get; private set; }
@@ -17,7 +17,7 @@ namespace KingPongServer
         public double velocityX { get; private set; }
         public double velocityY { get; private set; }
 
-        private double speed = 40; //px/s
+        private double speed = 100; //px/s
 
         private Game game;
         
