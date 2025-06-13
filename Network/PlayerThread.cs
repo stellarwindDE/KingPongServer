@@ -60,7 +60,6 @@ namespace KingPongServer.Network
                     // eingehende pakete empfangen
                     if (stream.DataAvailable)
                     {
-                        Console.WriteLine("Data available");
                         try
                         {
                             // First read the 2-byte length prefix
@@ -75,9 +74,8 @@ namespace KingPongServer.Network
 
                             // Convert the 2 bytes to packet length
                             int packetLength = BitConverter.ToInt16(lengthBuffer, 0);
-                            System.Console.WriteLine($"Packet length: {packetLength}");
                             
-                            // Read the actual packet data
+                            // Tatsächliche Nutzdaten lesen
                             byte[] buffer = new byte[packetLength];
                             int bytesRead = stream.Read(buffer, 0, packetLength);
                             
@@ -86,7 +84,6 @@ namespace KingPongServer.Network
                                 // Verbindung von Client geschlossen
                                 break;
                             }
-                            System.Console.WriteLine($"Bytes read: {buffer[0]}, {buffer[1]}");
 
                             IPacket message = MessagePackSerializer.Deserialize<IPacket>(buffer);
                             // TODO: eingehende pakete verarbeiten
@@ -158,12 +155,12 @@ namespace KingPongServer.Network
 
                     if (player.id == 1)
                     {
-                        Application.ServerInstance.gameInstance.paddle1.setMotionY((-1.0) * paddleControlPacket.Direction * 60);
+                        Application.ServerInstance.gameInstance.paddle1.setMotionY((-1.0) * paddleControlPacket.Direction * 80);
                         System.Console.WriteLine($"Paddle1 motionY: {Application.ServerInstance.gameInstance.paddle1.getMotionY()}, posY: {Application.ServerInstance.gameInstance.paddle1.getY()}");
                     }
                     else
                     {
-                        Application.ServerInstance.gameInstance.paddle2.setMotionY((-1.0) * paddleControlPacket.Direction * 60);
+                        Application.ServerInstance.gameInstance.paddle2.setMotionY((-1.0) * paddleControlPacket.Direction * 80);
                         System.Console.WriteLine($"Paddle2 motionY: {Application.ServerInstance.gameInstance.paddle2.getMotionY()}, posY: {Application.ServerInstance.gameInstance.paddle2.getY()}");
                     }
 
