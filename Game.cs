@@ -25,14 +25,6 @@ namespace KingPongServer
 
             players = new Player[2];
 
-        }
-
-
-        public void StartGame(Player player1, Player player2)
-        {
-            players[0] = player1;
-            players[1] = player2;
-
             paddle1 = new Paddle();
             paddle2 = new Paddle();
 
@@ -44,6 +36,14 @@ namespace KingPongServer
 
             paddle2.setX(SizeX - 10 - paddle2.getWidth());
             paddle2.setY(SizeY / 2 - paddle2.getHeight() / 2);
+
+        }
+
+
+        public void StartGame(Player player1, Player player2)
+        {
+            players[0] = player1;
+            players[1] = player2;
 
             gameStartTime = lastUpdateTime = DateTime.Now.Ticks; //10.000 Ticks = 1ms
 
@@ -120,10 +120,16 @@ namespace KingPongServer
             }
 
             foreach(Player player in players){
-                player.playerThread.QueuePacket(new PaddlePositionPacket(paddle1.posX, paddle1.posY, 0, paddle1.motionY, paddle2.posX, paddle2.posY, 0, paddle2.motionY, ball.posX, ball.posY, ball.velocityX, ball.velocityY));
+                sendCurrentPositions(player);
+                //player.playerThread.QueuePacket(new PaddlePositionPacket(paddle1.posX, paddle1.posY, 0, paddle1.motionY, paddle2.posX, paddle2.posY, 0, paddle2.motionY, ball.posX, ball.posY, ball.velocityX, ball.velocityY));
             }
 
             lastUpdateTime = DateTime.Now.Ticks;
+        }
+
+        public void sendCurrentPositions(Player player)
+        {
+            player.playerThread.QueuePacket(new PaddlePositionPacket(paddle1.posX, paddle1.posY, 0, paddle1.motionY, paddle2.posX, paddle2.posY, 0, paddle2.motionY, ball.posX, ball.posY, ball.velocityX, ball.velocityY));
         }
 
         public void scorePlayer(int n){

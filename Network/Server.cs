@@ -48,6 +48,7 @@ namespace KingPongServer.Network
                         playerThread.QueuePacket(new GameStatePacket(GameState.WAITING, playerCount));
 
                         playerThread.player = players[findFirstAvailablePlayerIndex()] = new Player(playerThread, gameInstance, playerCount);
+                        gameInstance.sendCurrentPositions(playerThread.player);
                         
                         if(playerCount == 2) 
                         {
